@@ -218,3 +218,8 @@ int CRectangle::rotateRight(){
      show();
      return RT_RIGHT;
 }
+
+bool CRectangle::isVertical(){
+    if (direction == VRECTANGLE) return true;
+    else return false;
+}

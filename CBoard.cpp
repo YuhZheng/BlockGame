@@ -101,6 +101,61 @@ CBoard& CBoard::operator>>(CTriangle triangle) {
      return (*this);
 }
 
+int CBoard::operator<<(CBrick* pBrick){
+    int result = 0;
+    RECT rect;    
+    vector<CBrick*>::iterator ptrBrick;
+     
+    vecPTRBricks.push_back(pBrick);
+    /********************************************/    
+    int rowID = pBrick->getRowofCenter();
+    rect.bottom = -1;
+    rect.top = -1;
+    
+    if(pBrick->isVertical()){
+        rowStates[rowID].linked = true;
+        rowStates[rowID-1].linked = true;
+    }
+    for(rowID = 1;rowID < 31;rowID++){
+        if(rowStates[rowID].blankTriangles > 0) continue;
+        if(rowStates[rowID].linked == true){
+            int temp = rowID + 1;
+            while(rowStates[temp].blankTriangles == 0 && temp < 31){
+                if(rowStates[temp].linked == false){
+                    rect.top = temp;
+                    rect.bottom = rowID;
+                    //linked如何还原？？
+                    break;
+                }
+                temp++;
+            }
+        }else{
+            rect.top = rect.bottom = rowID;
+        }
+        if(rect.top != -1 || rect.bottom != -1) break;        
+    } 
+    /*******************************************/
+    if(rect.top == -1 && rect.bottom == -1) return 0;
+    CComparator comparator_obj;
+    sort(vecPTRBricks.begin(),vecPTRBricks.end(),comparator_obj);
+    /**********************************************/
+    ptrBrick = vecPTRBricks.begin();
+    int height = rect.top - rect.bottom + 1;
+    while (ptrBrick!=vecPTRBricks.end()){
+        rowID = (*ptrBrick)->getRowofCenter();  
+        if(rowID>=rect.bottom && rowID<=rect.top){
+            result += (*ptrBrick)->deleteBrick(); 
+            delete *ptrBrick; 
+            ptrBrick = vecPTRBricks.erase(ptrBrick);
+            continue;
+        } 
+        if(rowID>rect.top) (*ptrBrick)->drop(height);
+        ptrBrick++;
+    }
+    
+    return result;
+}
+
 CBoard::~CBoard() {
          
 }

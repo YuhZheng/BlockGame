@@ -27,7 +27,7 @@
 #define GWLP_ID             (-12)
 
 // ...
-
+#include <algorithm> 
 #include <vector>
 #include <fstream>   
 #include <stdio.h>
@@ -116,6 +116,7 @@ public:
        unsigned short  getRim(short x, short y);
        CBoard& operator<<(CTriangle triangle);
        CBoard& operator>>(CTriangle triangle);
+       int operator<<(CBrick* pBrick);
 };
 
 class CBrick {
@@ -123,22 +124,30 @@ class CBrick {
 protected:
       static CBoard &board;
       short  x,y;
+      short  x0,y0;
       unsigned char color, direction;
+      unsigned char iniDirection;//initial direction
       virtual void  erase()=0;
       virtual void  show()=0;
       virtual bool isProped()=0;
 public:
-      short  score;
+      int step;
+      short  score;      
       CBrick(short x_, short y_, char color_, unsigned char direction_);
       virtual ~CBrick();
       static CBrick* newBrick();
       void stop();
+      void drop(int height);
       int  mvDown(int command=UNDEFINED);
+      int  getRowofCenter();
+      int  deleteBrick(); //virtual??
+      virtual bool isVertical ();
       virtual int  mvLeft()=0;
       virtual int  mvRight()=0; 
       virtual int  rotateLeft();
       virtual int  rotateRight();
 friend class CDisplay;
+friend class CComparator;
 };
 
 class CPlayer {
@@ -181,6 +190,7 @@ class CTrapezium:public CBrick{
       virtual bool  isProped();
 public:
       CTrapezium(short x_, short y_, char color_, unsigned char direction_);
+      virtual bool isVertical();
       virtual int  mvLeft();
       virtual int  mvRight(); 
       virtual int  rotateLeft();
@@ -203,10 +213,15 @@ class CRectangle:public CBrick{
       virtual bool  isProped();
 public:
       CRectangle(short x_, short y_, char color_, unsigned char direction_);
+      virtual bool isVertical();
       virtual int  mvLeft();
       virtual int  mvRight(); 
       virtual int  rotateLeft();
       virtual int  rotateRight();
 }; 
 
+class CComparator{
+    public:
+        bool operator()(const CBrick* arg1,const CBrick* arg2);
+}; 
 

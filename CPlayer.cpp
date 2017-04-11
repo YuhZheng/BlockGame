@@ -89,8 +89,13 @@ void CPlayer::executeCommand() {
      command = UNDEFINED;
      if ( result != STOPPED ) return;
      
+     /*****如何解决指针删除问题？*****/
+     pBrick->stop();
+     score += pBrick->score;
      board.repaint();
-     delete pBrick;
+     //delete pBrick;
+     /**************************/
+     
      pBrick = CBrick::newBrick();
      if ( pBrick==NULL ) pDisplay->show(str_gameover);
      return;

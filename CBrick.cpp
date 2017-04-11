@@ -24,15 +24,15 @@ friend class CDisplay;
 };
 */
 CBrick::CBrick(short x_, short y_, char color_, unsigned char direction_){
-     x = x_;
-     y = y_;
+     x0 = x = x_;
+     y0 = y = y_;
      color = color_ % (COLOR_NUM+1);
-     direction = direction_;
+     iniDirection = direction = direction_;
      return;
 }
 
 void CBrick::stop(){
-
+     score += board<<(this);
      return;
 }
 
@@ -90,6 +90,73 @@ CBrick* CBrick::newBrick(){
      }
      if (result!=NULL) result->show();
      return result;
+}
+
+int CBrick::getRowofCenter(){
+    return y;
+}
+
+void CBrick::drop(int height){
+    erase();
+    y = y - height;
+    show();
+}
+/******CBrick::deleteBrick()计分仍需修改，未设初始分***********/
+int CBrick::deleteBrick(){
+    int result = score;
+    int s;
+    s = abs(x-x0) + abs(y-y0);
+    if(direction != iniDirection){
+        switch(direction){
+            case SQUARE:
+                break;
+            case HRECTANGLE:
+            case VRECTANGLE:
+                s += 1;
+                break;
+            case LUTRIANGLE:
+                if(iniDirection == RDTRIANGLE) s += 2;
+                else s += 1;
+                break;
+            case RUTRIANGLE:
+                if(iniDirection == LDTRIANGLE) s += 2;
+                else s += 1;
+                break;
+            case RDTRIANGLE:
+                if(iniDirection == LUTRIANGLE) s += 2;
+                else s += 1;
+                break;
+            case LDTRIANGLE:
+                if(iniDirection == RUTRIANGLE) s += 2;
+                else s += 1;
+                break;         
+            case HUTRAPEZIUM:
+                if(iniDirection == HDTRAPEZIUM) s += 2;
+                else s += 1;
+                break;
+            case HDTRAPEZIUM:
+                if(iniDirection == HUTRAPEZIUM) s += 2;
+                else s += 1;
+                break;
+            case VRTRAPEZIUM:
+                if(iniDirection == VLTRAPEZIUM) s += 2;
+                else s += 1;
+                break;
+            case VLTRAPEZIUM:
+                if(iniDirection == VRTRAPEZIUM) s += 2;
+                else s += 1;
+                break;
+            default:
+                break;
+        }
+    }   
+    if(s> step) result += s - step;
+    erase();
+    return result;
+}
+
+bool CBrick::isVertical(){
+    return false;
 }
 
 CBrick::~CBrick() {

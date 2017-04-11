@@ -311,4 +311,8 @@ int CTrapezium::rotateRight(){
      return RT_RIGHT;
 }
 
+bool CTrapezium::isVertical(){
+    if (direction == VRTRAPEZIUM || direction == VLTRAPEZIUM) return true;
+    else return false;
+}
 
