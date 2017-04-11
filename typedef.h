@@ -1,6 +1,33 @@
 #include <windows.h>
 #include <windowsx.h>
 
+// ...
+
+#define GWL_WNDPROC         (-4)
+#define GWL_HINSTANCE       (-6)
+#define GWL_HWNDPARENT      (-8)
+#define GWL_STYLE           (-16)
+#define GWL_EXSTYLE         (-20)
+#define GWL_USERDATA        (-21)
+#define GWL_ID              (-12)
+
+#ifdef _WIN64
+
+#undef GWL_WNDPROC
+#undef GWL_HINSTANCE
+#undef GWL_HWNDPARENT
+#undef GWL_USERDATA
+
+#endif /* _WIN64 */
+
+#define GWLP_WNDPROC        (-4)
+#define GWLP_HINSTANCE      (-6)
+#define GWLP_HWNDPARENT     (-8)
+#define GWLP_USERDATA       (-21)
+#define GWLP_ID             (-12)
+
+// ...
+
 #include <vector>
 #include <fstream>   
 #include <stdio.h>
@@ -148,4 +175,38 @@ public:
       virtual int  rotateLeft();
       virtual int  rotateRight();
 };
+class CTrapezium:public CBrick{
+      virtual void  erase();
+      virtual void  show();
+      virtual bool  isProped();
+public:
+      CTrapezium(short x_, short y_, char color_, unsigned char direction_);
+      virtual int  mvLeft();
+      virtual int  mvRight(); 
+      virtual int  rotateLeft();
+      virtual int  rotateRight();
+};
+
+class CSquare:public CBrick{
+      virtual void  erase();
+      virtual void  show();
+      virtual bool  isProped();
+public:
+      CSquare(short x_, short y_, char color_, unsigned char direction_);
+      virtual int  mvLeft();
+      virtual int  mvRight(); 
+};  
+
+class CRectangle:public CBrick{
+      virtual void  erase();
+      virtual void  show();
+      virtual bool  isProped();
+public:
+      CRectangle(short x_, short y_, char color_, unsigned char direction_);
+      virtual int  mvLeft();
+      virtual int  mvRight(); 
+      virtual int  rotateLeft();
+      virtual int  rotateRight();
+}; 
+
 

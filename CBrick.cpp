@@ -66,22 +66,24 @@ CBrick* CBrick::newBrick(){
      if ( board.getRim(6, 30)&LUTRIANGLE&RUTRIANGLE ) return result;
      switch ( brickType[curBrickType] ) {
      case SQUARE:
+          result = new CSquare(6, 30, color, brickType[curBrickType]);
+          break;
      case HRECTANGLE:
      case VRECTANGLE:
-          return newBrick();
+          result = new CRectangle(6, 30, color, brickType[curBrickType]);
           break;
      case LUTRIANGLE:
      case RUTRIANGLE:
      case RDTRIANGLE:
      case LDTRIANGLE:
-          if ( board.getRim(6, 30)&brickType[curBrickType] ) return newBrick();
+          if ( board.getRim(6, 30)&brickType[curBrickType] ) return newBrick();//??
           result = new CTriangle(6, 30, color, brickType[curBrickType]);
           break;          
      case HUTRAPEZIUM:
      case HDTRAPEZIUM:
      case VRTRAPEZIUM:
      case VLTRAPEZIUM:
-          return newBrick();
+          result = new CTrapezium(6, 30, color, brickType[curBrickType]);
           break;
      default:
            break;
